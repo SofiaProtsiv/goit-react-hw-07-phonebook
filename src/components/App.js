@@ -1,7 +1,7 @@
 import { ReactComponent as AddUserBtn } from '../icons/addUser.svg';
 import { ReactComponent as CloseBtn } from '../icons/close.svg';
 import { useState, useEffect } from 'react';
-import { connect, useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ContactForm from './ContactForm/index';
 import Filter from './Filter';
@@ -13,7 +13,10 @@ import IconButton from './IconButton';
 import { ImSpinner } from 'react-icons/im';
 import { fetchContacts } from '../redux/contacts-operations';
 
-function App({ contacts, isLoading }) {
+function App() {
+  const contacts = useSelector(state => state.contacts.items);
+  const isLoading = useSelector(state => state.contacts.loading);
+
   const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState(false);
@@ -46,8 +49,8 @@ function App({ contacts, isLoading }) {
         </div>
       )}
       <Section title="Contacts">
-        {contacts.items.length > 0 && <Filter />}
-        {contacts.items.length > 0 ? (
+        {contacts.length > 0 && <Filter />}
+        {contacts.length > 0 ? (
           <ContactsList />
         ) : (
           <p className="notification">
@@ -59,9 +62,4 @@ function App({ contacts, isLoading }) {
   );
 }
 
-const mapStateToProps = state => ({
-  contacts: state.contacts,
-  isLoading: state.contacts.loading,
-});
-
-export default connect(mapStateToProps)(App);
+export default App;

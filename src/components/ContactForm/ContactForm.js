@@ -7,15 +7,14 @@ import { getContacts } from '../../redux/contacts-selectors';
 import { addContact } from '../../redux/contacts-operations';
 
 export default function ContactsForm({ toggleModal }) {
-  const contacts = useSelector(getContacts);
-  const dispatch = useDispatch();
-  const onAddContact = (name, number) => dispatch(addContact(name, number));
-
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
+
   const handleSubmit = event => {
     event.preventDefault();
-
+    console.log(contacts);
     if (
       contacts.find(
         contact => contact.name.toLowerCase() === name.toLowerCase()
@@ -27,7 +26,7 @@ export default function ContactsForm({ toggleModal }) {
     } else if (name.trim() === '' || number.trim() === '') {
       Notiflix.Notify.failure("Enter the contact's name and number phone!");
     } else {
-      onAddContact(name, number);
+      dispatch(addContact({ name, number }));
     }
 
     setName('');
